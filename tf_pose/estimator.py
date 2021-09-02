@@ -305,18 +305,26 @@ class TfPoseEstimator:
 
         # load graph
         logger.info('loading graph from %s(default size=%dx%d)' % (graph_path, target_size[0], target_size[1]))
-        with tf.gfile.GFile(graph_path, 'rb') as f:
-            graph_def = tf.GraphDef()
-            graph_def.ParseFromString(f.read())
 
+        # graph_path의 파일을 바이너리 읽기로 오픈한다.
+        with tf.gfile.GFile(graph_path, 'rb') as f: # 
+            # print('\n\n\n\n\n\n\n', graph_path, f, '\n\n\n\n\n\n\n\n\n')
+            graph_def = tf.GraphDef() # .pb 데이터를 deserialize할 수 있는 객체를 생성한다.
+            graph_def.ParseFromString(f.read()) # .pb 데이터를 열어 serialized된 데이터를 읽어 graph_def를 통해 deserialize한다.
+        
+
+        # 새 그래프를 생성한다.
         self.graph = tf.get_default_graph()
+
+        # default graph에 desirialized된 데이터를 추가한다.
         tf.import_graph_def(graph_def, name='TfPoseEstimator')
         self.persistent_sess = tf.Session(graph=self.graph, config=tf_config)
 
-        # for op in self.graph.get_operations():
-        #     print(op.name)
-        # for ts in [n.name for n in tf.get_default_graph().as_graph_def().node]:
-        #     print(ts)
+        for op in self.graph.get_operations():
+            print(op.name)
+        print('\n\n----------------------\n\n')
+        for ts in [n.name for n in tf.get_default_graph().as_graph_def().node]:
+            print(ts)
 
         self.tensor_image = self.graph.get_tensor_by_name('TfPoseEstimator/image:0')
         self.tensor_output = self.graph.get_tensor_by_name('TfPoseEstimator/Openpose/concat_stage7:0')

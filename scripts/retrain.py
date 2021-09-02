@@ -1182,9 +1182,9 @@ if __name__ == '__main__':
       help='Where to save summary logs for TensorBoard.'
   )
   parser.add_argument(
-      '--how_many_training_steps',
+      '--how_many_training_steps', # == epochs
       type=int,
-      default=4000,
+      default=1000,
       help='How many training steps to run before ending.'
   )
   parser.add_argument(

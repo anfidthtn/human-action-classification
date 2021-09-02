@@ -10,6 +10,7 @@ from tf_pose.networks import get_graph_path, model_wh
 import scripts.label_image as label_img
 import scripts.label_image_scene as label_img_scene
 
+
 logger = logging.getLogger('Pose_Action_and_Scene_Understanding')
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
@@ -21,14 +22,24 @@ logger.addHandler(ch)
 fps_time = 0
 address = os.getcwd()
 if __name__ == '__main__':
+	'''
+	parser을 통해 args에 각종 argument들을 받는다.
+	'''
 	parser = argparse.ArgumentParser(description='tf-human-action-classification')
 	parser.add_argument('--image', type=str, required=True)
 	parser.add_argument('--show-process', type=bool, default=False,
 						help='for debug purpose, if enabled, speed for inference is dropped.')
+	parser.add_argument('--model', type=str, default='mobilenet_thin')
 	args = parser.parse_args()
 
-	logger.debug('initialization %s : %s' % ('mobilenet_thin', get_graph_path('mobilenet_thin')))
-	e = TfPoseEstimator(get_graph_path('mobilenet_thin'), target_size=(432, 368))
+	print(args.model)
+	'''
+	
+	'''
+	# logger.debug('initialization %s : %s' % ('mobilenet_thin', get_graph_path('mobilenet_thin')))
+	# e = TfPoseEstimator(get_graph_path('mobilenet_thin'), target_size=(432, 368))
+	logger.debug('initialization %s : %s' % (args.model, get_graph_path(args.model)))
+	e = TfPoseEstimator(get_graph_path(args.model), target_size=(432, 368))
 	image = cv2.imread(args.image)
 	logger.info('cam image=%dx%d' % (image.shape[1], image.shape[0]))
 
