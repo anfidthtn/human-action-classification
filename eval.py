@@ -83,5 +83,5 @@ if __name__ == '__main__':
 	outF.close()
 # =============================================================================
 # For running the script simply run the following in the cmd prompt/terminal :
-# python3 run_image.py --image=test.png
+# python run_image.py --image=test.png
 # =============================================================================

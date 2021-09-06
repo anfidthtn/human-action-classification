@@ -78,7 +78,8 @@ def get_graph_path(model_name):
     dyn_graph_path = {
         'cmu': 'graph/cmu/graph_opt.pb',
         'mobilenet_thin': 'graph/mobilenet_thin/graph_opt.pb',
-        'retrained': '../tf_files/retrained_graph.pb/classify_image_graph_def.pb'
+        # 'retrained': '../tf_files/output_graph.pb'
+        'retrained': '../tf_files/retrained_graph.pb/mobilenet_v1_1.0_224/frozen_graph.pb'
     }
 
     base_data_dir = dirname(dirname(abspath(__file__)))

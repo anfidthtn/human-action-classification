@@ -138,6 +138,7 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
     A dictionary containing an entry for each label subfolder, with images split
     into training, testing, and validation sets within each label.
   """
+  print(image_dir, 222222222222222222222222222)
   if not gfile.Exists(image_dir):
     tf.logging.error("Image directory '" + image_dir + "' not found.")
     return None
@@ -873,6 +874,8 @@ def create_model_info(architecture):
     input_std = 128
   elif architecture.startswith('mobilenet_'):
     parts = architecture.split('_')
+    print(parts)
+    print(len(parts))
     if len(parts) != 3 and len(parts) != 4:
       tf.logging.error("Couldn't understand architecture name '%s'",
                        architecture)
@@ -973,20 +976,50 @@ def main(_):
   prepare_file_system()
 
   # Gather information about the model architecture we'll be using.
+  '''
+  모델 정보 구조를 만든다.
+  data_url : tgz 파일 주소
+  bottleneck_tensor_name : 뭐야 (MobilenetV1/Predictions/Reshape:0)
+  bottleneck_tensor_size : 뭐지 (1001)
+  input_width : 인풋 폭(224)
+  input_height : 인풋 높이(224)
+  input_depth : RGB인 것 같음(3)
+  resized_input_tensor_name : 뭘까(input:0)
+  model_file_name : tgz파일 내 모델 파일 이름인듯 (mobilenet_v1_1.0_224\\frozen_graph.pb)
+  input_mean : 인풋 평균
+  input_std : 인풋 표준편차
+  '''
   model_info = create_model_info(FLAGS.architecture)
   if not model_info:
     tf.logging.error('Did not recognize architecture flag')
     return -1
+  print(model_info)
 
   # Set up the pre-trained graph.
+  '''
+  tgz 파일을 다운받고 압축푼다.
+  '''
   maybe_download_and_extract(model_info['data_url'])
+  '''
+  모델 정보로 graph와 tensor들을 만든다.
+  '''
   graph, bottleneck_tensor, resized_image_tensor = (
       create_model_graph(model_info))
 
+  '''
+  클래스(액션)별로 train / test / validation 의 이미지 파일 이름 리스트를 만든다.
+  '''
   # Look at the folder structure, and create lists of all the images.
   image_lists = create_image_lists(FLAGS.image_dir, FLAGS.testing_percentage,
                                    FLAGS.validation_percentage)
+  print(FLAGS.image_dir, 3333333333333)
+  '''
+  클래스(액션)의 수를 받는다.
+  '''
   class_count = len(image_lists.keys())
+  '''
+  클래스 수가 0이나 1이면 구분할게 없거나 구분할 필요가 없으므로 에러다.
+  '''
   if class_count == 0:
     tf.logging.error('No valid folders of images found at ' + FLAGS.image_dir)
     return -1
@@ -996,7 +1029,13 @@ def main(_):
                      ' - multiple classes are needed for classification.')
     return -1
 
+
   # See if the command-line flags mean we're applying any distortions.
+  '''
+  이미지에 랜덤 상하좌우 반전, 랜덤 자르기, 랜덤 확대축소, 랜덤 밝기변경을
+  하는지 여부를 T/F로 반환한다.
+  (default = False)
+  '''
   do_distort_images = should_distort_images(
       FLAGS.flip_left_right, FLAGS.random_crop, FLAGS.random_scale,
       FLAGS.random_brightness)
@@ -1151,13 +1190,13 @@ if __name__ == '__main__':
   parser.add_argument(
       '--output_graph',
       type=str,
-      default='/tmp/output_graph.pb',
+      default='tf_files/output_graph.pb',
       help='Where to save the trained graph.'
   )
   parser.add_argument(
       '--intermediate_output_graphs_dir',
       type=str,
-      default='/tmp/intermediate_graph/',
+      default='tf_files/intermediate_graph/',
       help='Where to save the intermediate graphs.'
   )
   parser.add_argument(
@@ -1172,19 +1211,19 @@ if __name__ == '__main__':
   parser.add_argument(
       '--output_labels',
       type=str,
-      default='/tmp/output_labels.txt',
+      default='tf_files/output_labels.txt',
       help='Where to save the trained graph\'s labels.'
   )
   parser.add_argument(
       '--summaries_dir',
       type=str,
-      default='/tmp/retrain_logs',
+      default='tf_files/retrain_logs',
       help='Where to save summary logs for TensorBoard.'
   )
   parser.add_argument(
       '--how_many_training_steps', # == epochs
       type=int,
-      default=1000,
+      default=100,
       help='How many training steps to run before ending.'
   )
   parser.add_argument(
@@ -1252,7 +1291,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--model_dir',
       type=str,
-      default='/tmp/imagenet',
+      default='tf_files/imagenet',
       help="""\
       Path to classify_image_graph_def.pb,
       imagenet_synset_to_human_label_map.txt, and
@@ -1262,7 +1301,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--bottleneck_dir',
       type=str,
-      default='/tmp/bottleneck',
+      default='tf_files/bottleneck',
       help='Path to cache bottleneck layer values as files.'
   )
   parser.add_argument(
@@ -1311,7 +1350,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--architecture',
       type=str,
-      default='inception_v3',
+      default='mobilenet_1.0_224',
       help="""\
       Which model architecture to use. 'inception_v3' is the most accurate, but
       also the slowest. For faster or smaller models, chose a MobileNet with the
@@ -1323,4 +1362,9 @@ if __name__ == '__main__':
       for more information on Mobilenet.\
       """)
   FLAGS, unparsed = parser.parse_known_args()
+  print(sys.argv, unparsed)
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+
+'''
+python scripts/retrain.py --model_dir=tf_files/retrained_graph.pb --output_labels=tf_files/retrained_labels.txt --image_dir=training/
+'''

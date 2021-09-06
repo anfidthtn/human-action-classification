@@ -40,7 +40,9 @@ if __name__ == '__main__':
 	# e = TfPoseEstimator(get_graph_path('mobilenet_thin'), target_size=(432, 368))
 	logger.debug('initialization %s : %s' % (args.model, get_graph_path(args.model)))
 	e = TfPoseEstimator(get_graph_path(args.model), target_size=(432, 368))
+	print(os.getcwd())
 	image = cv2.imread(args.image)
+	print(image)
 	logger.info('cam image=%dx%d' % (image.shape[1], image.shape[0]))
 
 	# count = 0
@@ -79,5 +81,5 @@ if __name__ == '__main__':
 
 # =============================================================================
 # For running the script simply run the following in the cmd prompt/terminal :
-# python3 run_image.py --image=test.png
+# python run_image.py --image=1.jpg
 # =============================================================================
