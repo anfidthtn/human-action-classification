@@ -1367,4 +1367,5 @@ if __name__ == '__main__':
 
 '''
 python scripts/retrain.py --model_dir=tf_files/retrained_graph.pb --output_labels=tf_files/retrained_labels.txt --image_dir=training/
+python scripts/retrain.py --model_dir=tf_files/retrained_graph.pb --output_labels=tf_files/retrained_labels.txt --image_dir=training/ --architecture=inception_v3
 '''

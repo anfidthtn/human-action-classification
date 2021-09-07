@@ -324,19 +324,27 @@ class TfPoseEstimator:
         for op in self.graph.get_operations():
             print(op.name)
         print('\n\n----------------------\n\n')
+        # for ts in [n.name for n in tf.get_default_graph().as_graph_def().node]:
+        #     print(ts)
         for ts in [n.name for n in tf.get_default_graph().as_graph_def().node]:
-            print(ts)
+            print(ts, self.graph.get_tensor_by_name(ts + ':0').shape)
+        # for n in tf.get_default_graph().as_graph_def().node:
+        #     print(self.graph.get_tensor_by_name(n + ':0').dim)
 
         # self.tensor_image = self.graph.get_tensor_by_name('TfPoseEstimator/image:0')
         # self.tensor_output = self.graph.get_tensor_by_name('TfPoseEstimator/Openpose/concat_stage7:0')
-        self.tensor_image = self.graph.get_tensor_by_name('TfPoseEstimator/image:0')
-        self.tensor_output = self.graph.get_tensor_by_name('TfPoseEstimator/Openpose/concat_stage7:0')
-        self.tensor_heatMat = self.tensor_output[:, :, :, :19]
-        self.tensor_pafMat = self.tensor_output[:, :, :, 19:]
+        self.tensor_image = self.graph.get_tensor_by_name('TfPoseEstimator/ExpandDims:0')
+        self.tensor_output = self.graph.get_tensor_by_name('TfPoseEstimator/mixed_10/tower_2/conv:0')
+
+        print(self.tensor_output)
+
+        class_nums = 2
+        self.tensor_heatMat = self.tensor_output[:, :, :, :class_nums - 1]
+        self.tensor_pafMat = self.tensor_output[:, :, :, class_nums - 1:]
         self.upsample_size = tf.placeholder(dtype=tf.int32, shape=(2,), name='upsample_size')
-        self.tensor_heatMat_up = tf.image.resize_area(self.tensor_output[:, :, :, :19], self.upsample_size,
+        self.tensor_heatMat_up = tf.image.resize_area(self.tensor_output[:, :, :, :class_nums - 1], self.upsample_size,
                                                       align_corners=False, name='upsample_heatmat')
-        self.tensor_pafMat_up = tf.image.resize_area(self.tensor_output[:, :, :, 19:], self.upsample_size,
+        self.tensor_pafMat_up = tf.image.resize_area(self.tensor_output[:, :, :, class_nums - 1:], self.upsample_size,
                                                      align_corners=False, name='upsample_pafmat')
         smoother = Smoother({'data': self.tensor_heatMat_up}, 25, 3.0)
         gaussian_heatMat = smoother.get_output()

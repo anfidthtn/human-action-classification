@@ -81,5 +81,6 @@ if __name__ == '__main__':
 
 # =============================================================================
 # For running the script simply run the following in the cmd prompt/terminal :
-# python run_image.py --image=1.jpg
+# python run_image.py --image=2.jpg
+# python run_image.py --image=2.jpg --model=retrained
 # =============================================================================
