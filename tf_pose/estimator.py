@@ -331,10 +331,10 @@ class TfPoseEstimator:
         # for n in tf.get_default_graph().as_graph_def().node:
         #     print(self.graph.get_tensor_by_name(n + ':0').dim)
 
-        # self.tensor_image = self.graph.get_tensor_by_name('TfPoseEstimator/image:0')
-        # self.tensor_output = self.graph.get_tensor_by_name('TfPoseEstimator/Openpose/concat_stage7:0')
-        self.tensor_image = self.graph.get_tensor_by_name('TfPoseEstimator/ExpandDims:0')
-        self.tensor_output = self.graph.get_tensor_by_name('TfPoseEstimator/mixed_10/tower_2/conv:0')
+        self.tensor_image = self.graph.get_tensor_by_name('TfPoseEstimator/image:0')
+        self.tensor_output = self.graph.get_tensor_by_name('TfPoseEstimator/Openpose/concat_stage7:0')
+        # self.tensor_image = self.graph.get_tensor_by_name('TfPoseEstimator/ExpandDims:0')
+        # self.tensor_output = self.graph.get_tensor_by_name('TfPoseEstimator/mixed_10/tower_2/conv:0')
 
         print(self.tensor_output)
 
