@@ -384,7 +384,9 @@ class TfPoseEstimator:
             npimg = np.copy(npimg)
         image_h, image_w = npimg.shape[:2]
         centers = {}
+        print(humans)
         for human in humans:
+            print(human)
             # draw point
             for i in range(common.CocoPart.Background.value):
                 if i not in human.body_parts.keys():
