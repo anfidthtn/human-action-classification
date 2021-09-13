@@ -63,7 +63,7 @@ if __name__ == '__main__':
         
         # Classification
         pose_class = label_img.classify(image)
-        scene_class = label_img_scene.classify(args.image)
+        scene_class = label_img_scene.classify(image)
         
         logger.debug('+displaying+')
         cv2.putText(img,
