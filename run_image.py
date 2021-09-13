@@ -61,7 +61,7 @@ if __name__ == '__main__':
 	
 	# Classification
 	pose_class = label_img.classify(skeleton_image)
-	scene_class = label_img_scene.classify(skeleton_image)
+	scene_class = label_img_scene.classify(frame)
 	end_time = time.time()
 	logger.debug('+displaying+')
 	cv2.putText(output_image,
