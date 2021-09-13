@@ -41,40 +41,40 @@ if __name__ == '__main__':
 	logger.debug('initialization %s : %s' % (args.model, get_graph_path(args.model)))
 	e = TfPoseEstimator(get_graph_path(args.model), target_size=(432, 368))
 	print(os.getcwd())
-	image = cv2.imread(args.image)
-	print(image)
-	logger.info('cam image=%dx%d' % (image.shape[1], image.shape[0]))
+	frame = cv2.imread(args.image)
+	print(frame)
+	logger.info('cam image=%dx%d' % (frame.shape[1], frame.shape[0]))
 
 	# count = 0
 	
-	logger.debug('+image processing+')
+	logger.debug('+frame processing+')
 	logger.debug('+postprocessing+')
 	start_time = time.time()
-	humans = e.inference(image, upsample_size=4.0)
-	img = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
+	humans = e.inference(frame, upsample_size=4.0)
+	output_image = TfPoseEstimator.draw_humans(frame, humans, imgcopy=False)
 	
 	logger.debug('+classification+')
 	# Getting only the skeletal structure (with white background) of the actual image
-	image = np.zeros(image.shape,dtype=np.uint8)
-	image.fill(255) 
-	image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
+	skeleton_image = np.zeros(frame.shape,dtype=np.uint8)
+	skeleton_image.fill(255) 
+	skeleton_image = TfPoseEstimator.draw_humans(skeleton_image, humans, imgcopy=False)
 	
 	# Classification
-	pose_class = label_img.classify(image)
-	scene_class = label_img_scene.classify(image)
+	pose_class = label_img.classify(skeleton_image)
+	scene_class = label_img_scene.classify(skeleton_image)
 	end_time = time.time()
 	logger.debug('+displaying+')
-	cv2.putText(img,
+	cv2.putText(output_image,
 				"Predicted Pose: %s" %(pose_class),
 				(10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
 				(0, 0, 255), 2)
-	cv2.putText(img,
+	cv2.putText(output_image,
 				"Predicted Scene: %s" %(scene_class),
 				(10, 30),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
 				(0, 0, 255), 2)
 	print('\n Overall Evaluation time (1-image): {:.3f}s\n'.format(end_time-start_time))
-	cv2.imwrite('show1.png',img)
-	cv2.imshow('tf-human-action-classification result', img)
+	cv2.imwrite('show1.png',output_image)
+	cv2.imshow('tf-human-action-classification result', output_image)
 	cv2.waitKey(0)
 	logger.debug('+finished+')
 	cv2.destroyAllWindows()
