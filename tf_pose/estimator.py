@@ -512,16 +512,20 @@ class TfPoseEstimator:
         if npimg is None:
             raise Exception('The image is not valid. Please check your image exists.')
 
+        print(npimg)
+
         if resize_to_default:
             upsample_size = [int(self.target_size[1] / 8 * upsample_size), int(self.target_size[0] / 8 * upsample_size)]
         else:
             upsample_size = [int(npimg.shape[0] / 8 * upsample_size), int(npimg.shape[1] / 8 * upsample_size)]
 
+        print(upsample_size)
         if self.tensor_image.dtype == tf.quint8:
             # quantize input image
             npimg = TfPoseEstimator._quantize_img(npimg)
+            print(npimg, 2)
             pass
-
+        print(npimg, 1)
         logger.debug('inference+ original shape=%dx%d' % (npimg.shape[1], npimg.shape[0]))
         img = npimg
         if resize_to_default:
@@ -530,6 +534,7 @@ class TfPoseEstimator:
             [self.tensor_peaks, self.tensor_heatMat_up, self.tensor_pafMat_up], feed_dict={
                 self.tensor_image: [img], self.upsample_size: upsample_size
             })
+        print(peaks, heatMat_up, pafMat_up)
         peaks = peaks[0]
         self.heatMat = heatMat_up[0]
         self.pafMat = pafMat_up[0]
