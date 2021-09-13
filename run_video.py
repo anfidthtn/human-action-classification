@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--resize', type=str, default='0x0',
                         help='if provided, resize images before they are processed. default=0x0, Recommends : 432x368 or 656x368 or 1312x736 ')
-    parser.add_argument('--resize-out-ratio', type=float, default=1.0,
+    parser.add_argument('--resize-out-ratio', type=float, default=4.0,
                         help='if provided, resize heatmaps before they are post-processed. default=1.0')
 
     parser.add_argument('--model', type=str, default='mobilenet_thin', help='cmu / mobilenet_thin')
