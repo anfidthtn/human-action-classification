@@ -90,25 +90,25 @@ def classify(image_file):
 # =============================================================================
   # Change the path to your convenience
   file_path = os.path.abspath(os.path.dirname(__file__))
-  # path = os.path.join(file_path, '../models/graph/retrained/retrained_v1.0/')
-  # model_file = path+'retrained_graph.pb'
-  # label_file = path+'retrained_labels.txt'
-  # input_height = 224
-  # input_width = 224
-  # input_mean = 128
-  # input_std = 128
-  # input_layer = "input"
-  # output_layer = "final_result"
-
-  path = os.path.join(file_path, '../tf_files/')
-  model_file = path+'output_scene_graph.pb'
-  label_file = path+'output_scene_labels.txt'
-  input_height = 299
-  input_width = 299
+  path = os.path.join(file_path, '../models/graph/retrained/retrained_v1.0/')
+  model_file = path+'retrained_graph.pb'
+  label_file = path+'retrained_labels.txt'
+  input_height = 224
+  input_width = 224
   input_mean = 128
   input_std = 128
-  input_layer = "Mul"
+  input_layer = "input"
   output_layer = "final_result"
+
+  # path = os.path.join(file_path, '../tf_files/')
+  # model_file = path+'output_scene_graph.pb'
+  # label_file = path+'output_scene_labels.txt'
+  # input_height = 299
+  # input_width = 299
+  # input_mean = 128
+  # input_std = 128
+  # input_layer = "Mul"
+  # output_layer = "final_result"
 
   graph = load_graph(model_file)
   # for op in graph.get_operations():
