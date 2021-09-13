@@ -42,44 +42,44 @@ if __name__ == '__main__':
         e = TfPoseEstimator(get_graph_path(args.model), target_size=(432, 368))
     logger.debug('video read+')
     video = cv2.VideoCapture(args.video)
-    ret_val, image = video.read()
-    while image.shape[1] > 500:
-        image = cv2.resize(image, dsize=(0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_LINEAR)
-    logger.info('video image=%dx%d' % (image.shape[1], image.shape[0]))
+    ret_val, frame = video.read()
+    while frame.shape[1] > 500:
+        frame = cv2.resize(frame, dsize=(0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_LINEAR)
+    logger.info('video frame=%dx%d' % (frame.shape[1], frame.shape[0]))
 
     # count = 0
     while video.isOpened():
         
-        logger.debug('+image processing+')
-        ret_val, image = video.read()
-        while image.shape[1] > 500:
-            image = cv2.resize(image, dsize=(0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_LINEAR)
+        logger.debug('+frame processing+')
+        ret_val, frame = video.read()
+        while frame.shape[1] > 500:
+            frame = cv2.resize(frame, dsize=(0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_LINEAR)
         
         logger.debug('+postprocessing+')
-        humans = e.inference(image, resize_to_default=(w > 0 and h > 0), upsample_size=args.resize_out_ratio)
-        img = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
+        humans = e.inference(frame, resize_to_default=(w > 0 and h > 0), upsample_size=args.resize_out_ratio)
+        output_image = TfPoseEstimator.draw_humans(frame, humans, imgcopy=False)
         
         logger.debug('+classification+')
         # Getting only the skeletal structure (with white background) of the actual image
-        image = np.zeros(image.shape,dtype=np.uint8)
-        image.fill(255) 
-        image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
+        skeleton_image = np.zeros(frame.shape,dtype=np.uint8)
+        skeleton_image.fill(255) 
+        skeleton_image = TfPoseEstimator.draw_humans(skeleton_image, humans, imgcopy=False)
         
         # Classification
-        pose_class = label_img.classify(image)
-        scene_class = label_img_scene.classify(image)
+        pose_class = label_img.classify(frame)
+        scene_class = label_img_scene.classify(frame)
         
         logger.debug('+displaying+')
-        cv2.putText(img,
+        cv2.putText(output_image,
                     "Current predicted pose is : %s" %(pose_class),
                     (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                     (0, 255, 0), 2)
-        cv2.putText(img,
+        cv2.putText(output_image,
 				"Predicted Scene: %s" %(scene_class),
 				(10, 30),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
 				(0, 0, 255), 2)
         
-        cv2.imshow('tf-pose-estimation result', img)
+        cv2.imshow('tf-pose-estimation result', output_image)
         
         fps_time = time.time()
         if cv2.waitKey(1) & 0xFF == ord('q'):

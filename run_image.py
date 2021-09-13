@@ -60,7 +60,7 @@ if __name__ == '__main__':
 	skeleton_image = TfPoseEstimator.draw_humans(skeleton_image, humans, imgcopy=False)
 	
 	# Classification
-	pose_class = label_img.classify(skeleton_image)
+	pose_class = label_img.classify(frame)
 	scene_class = label_img_scene.classify(frame)
 	end_time = time.time()
 	logger.debug('+displaying+')
