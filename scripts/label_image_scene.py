@@ -64,12 +64,12 @@ def classify(image_file):
 # =============================================================================
   # Change the path to your convenience
   file_path = os.path.abspath(os.path.dirname(__file__))
-  # path = os.path.join(file_path, '../models/graph/retrained/retrained_v1.0/')
-  # model_file = path+'output_graph_20000.pb'
-  # label_file = path+'output_labels.txt'
-  path = os.path.join(file_path, '../tf_files/')
-  model_file = path+'output_scene_graph.pb'
-  label_file = path+'output_scene_labels.txt'
+  path = os.path.join(file_path, '../models/graph/retrained/retrained_v1.0/')
+  model_file = path+'output_graph_20000.pb'
+  label_file = path+'output_labels.txt'
+  # path = os.path.join(file_path, '../tf_files/')
+  # model_file = path+'output_scene_graph.pb'
+  # label_file = path+'output_scene_labels.txt'
   input_height = 299
   input_width = 299
   input_mean = 128
@@ -78,6 +78,8 @@ def classify(image_file):
   output_layer = "final_result"
 
   graph = load_graph(model_file)
+  for op in graph.get_operations():
+    print(op.name, graph.get_tensor_by_name(op.name + ':0').shape)
   t = read_tensor_from_image_file(image_file,
                                   input_height=input_height,
                                   input_width=input_width,

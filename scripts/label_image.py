@@ -76,6 +76,8 @@ def classify(image_file):
   output_layer = "final_result"
 
   graph = load_graph(model_file)
+  for op in graph.get_operations():
+    print(op.name, graph.get_tensor_by_name(op.name + ':0').shape)
   t = read_tensor_from_image_file(image_file,
                                   input_height=input_height,
                                   input_width=input_width,
@@ -92,18 +94,29 @@ def classify(image_file):
     results = sess.run(output_operation.outputs[0],
                       {input_operation.outputs[0]: t})
     end=time.time()
-  results = np.squeeze(results)
+  # results = np.squeeze(results)
 
+  # labels = load_labels(label_file)
+
+  # print('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
+  # template = "{} (score={:0.5f})"
+  # label = ''
+  # if results[0] > results[1]:
+  #     label = labels[0]
+  #     result = results[0]
+  # else:
+  #     label = labels[1]
+  #     result = results[1]
+
+  # return template.format(label, result)
+  results = np.squeeze(results)
+  top_k = results.argsort()[-5:][::-1]
   labels = load_labels(label_file)
 
   print('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
   template = "{} (score={:0.5f})"
-  label = ''
-  if results[0] > results[1]:
-      label = labels[0]
-      result = results[0]
-  else:
-      label = labels[1]
-      result = results[1]
+  for i in top_k:
+    print(template.format(labels[i], results[i]))
 
-  return template.format(label, result)
+
+  return template.format(labels[top_k[0]], results[top_k[0]])
