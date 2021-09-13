@@ -78,8 +78,8 @@ def classify(image_file):
   output_layer = "final_result"
 
   graph = load_graph(model_file)
-  for op in graph.get_operations():
-    print(op.name, graph.get_tensor_by_name(op.name + ':0').shape)
+  # for op in graph.get_operations():
+  #   print(op.name, graph.get_tensor_by_name(op.name + ':0').shape)
   t = read_tensor_from_image_file(image_file,
                                   input_height=input_height,
                                   input_width=input_width,

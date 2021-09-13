@@ -8,7 +8,7 @@ import numpy as np
 from tf_pose.estimator import TfPoseEstimator
 from tf_pose.networks import get_graph_path, model_wh
 import scripts.label_image as label_img
-import scripts.label_image_scene as label_img_scene
+# import scripts.label_image_scene as label_img_scene
 
 logger = logging.getLogger('TfPoseEstimator-WebCam')
 logger.setLevel(logging.DEBUG)
@@ -43,6 +43,8 @@ if __name__ == '__main__':
     logger.debug('video read+')
     video = cv2.VideoCapture(args.video)
     ret_val, image = video.read()
+    while image.shape[1] > 500:
+        image = cv2.resize(image, dsize=(0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_LINEAR)
     logger.info('video image=%dx%d' % (image.shape[1], image.shape[0]))
 
     # count = 0
@@ -50,6 +52,8 @@ if __name__ == '__main__':
         
         logger.debug('+image processing+')
         ret_val, image = video.read()
+        while image.shape[1] > 500:
+            image = cv2.resize(image, dsize=(0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_LINEAR)
         
         logger.debug('+postprocessing+')
         humans = e.inference(image, resize_to_default=(w > 0 and h > 0), upsample_size=args.resize_out_ratio)
@@ -63,22 +67,22 @@ if __name__ == '__main__':
         
         # Classification
         pose_class = label_img.classify(image)
-        scene_class = label_img_scene.classify(image)
+        # scene_class = label_img_scene.classify(image)
         
         logger.debug('+displaying+')
         cv2.putText(img,
                     "Current predicted pose is : %s" %(pose_class),
                     (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                     (0, 255, 0), 2)
-        cv2.putText(img,
-				"Predicted Scene: %s" %(scene_class),
-				(10, 30),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-				(0, 0, 255), 2)
+        # cv2.putText(img,
+		# 		"Predicted Scene: %s" %(scene_class),
+		# 		(10, 30),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+		# 		(0, 0, 255), 2)
         
         cv2.imshow('tf-pose-estimation result', img)
         
         fps_time = time.time()
-        if cv2.waitKey(1) == 27:
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
         logger.debug('+finished+')
         

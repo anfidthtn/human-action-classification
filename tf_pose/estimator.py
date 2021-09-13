@@ -321,13 +321,13 @@ class TfPoseEstimator:
         tf.import_graph_def(graph_def, name='TfPoseEstimator')
         self.persistent_sess = tf.Session(graph=self.graph, config=tf_config)
 
-        for op in self.graph.get_operations():
-            print(op.name)
+        # for op in self.graph.get_operations():
+        #     print(op.name)
         print('\n\n----------------------\n\n')
         # for ts in [n.name for n in tf.get_default_graph().as_graph_def().node]:
         #     print(ts)
-        for ts in [n.name for n in tf.get_default_graph().as_graph_def().node]:
-            print(ts, self.graph.get_tensor_by_name(ts + ':0').shape)
+        # for ts in [n.name for n in tf.get_default_graph().as_graph_def().node]:
+        #     print(ts, self.graph.get_tensor_by_name(ts + ':0').shape)
         # for n in tf.get_default_graph().as_graph_def().node:
         #     print(self.graph.get_tensor_by_name(n + ':0').dim)
 

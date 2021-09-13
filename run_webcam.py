@@ -8,7 +8,7 @@ import numpy as np
 from tf_pose.estimator import TfPoseEstimator
 from tf_pose.networks import get_graph_path, model_wh
 import scripts.label_image as label_img
-import scripts.label_image_scene as label_img_scene
+# import scripts.label_image_scene as label_img_scene
 
 logger = logging.getLogger('TfPoseEstimator-WebCam')
 logger.setLevel(logging.DEBUG)
@@ -63,17 +63,17 @@ if __name__ == '__main__':
         
         # Classification
         pose_class = label_img.classify(image)
-        scene_class = label_img_scene.classify(image)
+        # scene_class = label_img_scene.classify(image)
         
         logger.debug('+displaying+')
         cv2.putText(img,
                     "Current predicted pose is : %s" %(pose_class),
                     (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                     (0, 255, 0), 2)
-        cv2.putText(img,
-				"Predicted Scene: %s" %(scene_class),
-				(10, 30),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-				(0, 0, 255), 2)
+        # cv2.putText(img,
+		# 		"Predicted Scene: %s" %(scene_class),
+		# 		(10, 30),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+		# 		(0, 0, 255), 2)
         
         cv2.imshow('tf-pose-estimation result', img)
         
