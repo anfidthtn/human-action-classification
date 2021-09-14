@@ -130,10 +130,11 @@ int process_paf(int p1, int p2, int p3, float *peaks, int h1, int h2, int h3, fl
         vector<Connection>& conns = connection_all[pair_id];
         int part_id1 = COCOPAIRS[pair_id][0];
         int part_id2 = COCOPAIRS[pair_id][1];
-
+        std::cout << subset.size() << std::endl;
         for (int conn_id = 0; conn_id < (int) conns.size(); conn_id ++) {
             int found = 0;
             int subset_idx1=0, subset_idx2=0;
+            std::cout << subset.size() << std::endl;
             for (int subset_id = 0; subset_id < (int) subset.size(); subset_id ++) {
                 if (subset[subset_id][part_id1] == conns[conn_id].cid1 || subset[subset_id][part_id2] == conns[conn_id].cid2) {
                     if (found == 0) subset_idx1 = subset_id;
