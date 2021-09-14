@@ -194,6 +194,7 @@ int process_paf(int p1, int p2, int p3, float *peaks, int h1, int h2, int h3, fl
 }
 
 int get_num_humans() {
+    std::cout << 10000000000 << std::endl
     return subset.size();
 }
 

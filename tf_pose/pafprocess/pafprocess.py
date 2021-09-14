@@ -185,8 +185,7 @@ Connection_swigregister(Connection)
 
 
 def process_paf(*args):
-    print(111111111111111111111111111111111)
-    return _pafprocess.process_paf(*args)
+  return _pafprocess.process_paf(*args)
 process_paf = _pafprocess.process_paf
 
 def get_num_humans():
