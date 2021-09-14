@@ -271,12 +271,6 @@ class PoseEstimator:
     def estimate_paf(peaks, heat_mat, paf_mat):
         pafprocess.process_paf(peaks, heat_mat, paf_mat)
 
-        cv2.imshow('tf-pose-estimation result', peaks)
-        input()
-        cv2.imshow('tf-pose-estimation result', heat_mat)
-        input()
-        cv2.imshow('tf-pose-estimation result', paf_mat)
-        input()
         humans = []
         print(pafprocess.process_paf(peaks, heat_mat, paf_mat))
         print(pafprocess.get_num_humans())
@@ -521,6 +515,8 @@ class TfPoseEstimator:
             raise Exception('The image is not valid. Please check your image exists.')
 
         print(npimg)
+        cv2.imshow("1", npimg)
+        input()
 
         if resize_to_default:
             upsample_size = [int(self.target_size[1] / 8 * upsample_size), int(self.target_size[0] / 8 * upsample_size)]
