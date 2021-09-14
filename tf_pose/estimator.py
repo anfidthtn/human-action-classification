@@ -516,7 +516,7 @@ class TfPoseEstimator:
 
         print(npimg)
         cv2.imshow("1", npimg)
-        input()
+        cv2.waitKey(0)
 
         if resize_to_default:
             upsample_size = [int(self.target_size[1] / 8 * upsample_size), int(self.target_size[0] / 8 * upsample_size)]
