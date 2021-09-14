@@ -126,6 +126,7 @@ int process_paf(int p1, int p2, int p3, float *peaks, int h1, int h2, int h3, fl
 
     // Generate subset
     subset.clear();
+    std::cout << COCOPAIRS_SIZE << std::endl;
     for (int pair_id = 0; pair_id < COCOPAIRS_SIZE; pair_id ++) {
         vector<Connection>& conns = connection_all[pair_id];
         int part_id1 = COCOPAIRS[pair_id][0];
