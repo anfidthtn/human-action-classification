@@ -271,6 +271,9 @@ class PoseEstimator:
     def estimate_paf(peaks, heat_mat, paf_mat):
         pafprocess.process_paf(peaks, heat_mat, paf_mat)
 
+        print(pafprocess)
+        print(type(pafprocess))
+
         humans = []
         for human_id in range(pafprocess.get_num_humans()):
             human = Human([])

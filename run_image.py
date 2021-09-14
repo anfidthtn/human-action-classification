@@ -23,6 +23,7 @@ fps_time = 0
 address = os.getcwd()
 if __name__ == '__main__':
 	'''
+	1. 필요한 Parameter 받는다.
 	parser을 통해 args에 각종 argument들을 받는다.
 	'''
 	parser = argparse.ArgumentParser(description='tf-human-action-classification')
@@ -34,13 +35,16 @@ if __name__ == '__main__':
 
 	print(args.model)
 	'''
-	
+	2. model parameter에서 estimator를 로딩한다.
 	'''
 	# logger.debug('initialization %s : %s' % ('mobilenet_thin', get_graph_path('mobilenet_thin')))
 	# e = TfPoseEstimator(get_graph_path('mobilenet_thin'), target_size=(432, 368))
 	logger.debug('initialization %s : %s' % (args.model, get_graph_path(args.model)))
 	e = TfPoseEstimator(get_graph_path(args.model), target_size=(432, 368))
 	print(os.getcwd())
+	'''
+	3. 이미지를 cv2로 읽는다.
+	'''
 	frame = cv2.imread(args.image)
 	print(frame)
 	logger.info('cam image=%dx%d' % (frame.shape[1], frame.shape[0]))
