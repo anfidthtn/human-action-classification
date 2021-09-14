@@ -539,15 +539,15 @@ class TfPoseEstimator:
                 self.tensor_image: [img], self.upsample_size: upsample_size
             })
         print(peaks, heatMat_up, pafMat_up)
-        cv2.imshow("1", peaks)
-        cv2.waitKey(0)
-        cv2.imshow("1", heatMat_up)
-        cv2.waitKey(0)
-        cv2.imshow("1", pafMat_up)
-        cv2.waitKey(0)
         peaks = peaks[0]
         self.heatMat = heatMat_up[0]
         self.pafMat = pafMat_up[0]
+        cv2.imshow("1", peaks)
+        cv2.waitKey(0)
+        cv2.imshow("1", self.heatMat)
+        cv2.waitKey(0)
+        cv2.imshow("1", self.pafMat)
+        cv2.waitKey(0)
         logger.debug('inference- heatMat=%dx%d pafMat=%dx%d' % (
             self.heatMat.shape[1], self.heatMat.shape[0], self.pafMat.shape[1], self.pafMat.shape[0]))
 
