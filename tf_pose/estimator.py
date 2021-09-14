@@ -271,6 +271,12 @@ class PoseEstimator:
     def estimate_paf(peaks, heat_mat, paf_mat):
         pafprocess.process_paf(peaks, heat_mat, paf_mat)
 
+        cv2.imshow('tf-pose-estimation result', peaks)
+        input()
+        cv2.imshow('tf-pose-estimation result', heat_mat)
+        input()
+        cv2.imshow('tf-pose-estimation result', paf_mat)
+        input()
         humans = []
         print(pafprocess.process_paf(peaks, heat_mat, paf_mat))
         print(pafprocess.get_num_humans())
