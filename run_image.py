@@ -46,7 +46,6 @@ if __name__ == '__main__':
 	3. 이미지를 cv2로 읽는다.
 	'''
 	frame = cv2.imread(args.image)
-	print(frame)
 	logger.info('cam image=%dx%d' % (frame.shape[1], frame.shape[0]))
 
 	# count = 0
