@@ -276,6 +276,7 @@ class PoseEstimator:
 
         humans = []
         for human_id in range(pafprocess.get_num_humans()):
+            print(human_id)
             human = Human([])
             is_added = False
 
