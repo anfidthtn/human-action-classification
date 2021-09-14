@@ -53,6 +53,8 @@ if __name__ == '__main__':
 	logger.debug('+frame processing+')
 	logger.debug('+postprocessing+')
 	start_time = time.time()
+	cv2.imshow("1", frame)
+	input()
 	humans = e.inference(frame, upsample_size=4.0)
 	output_image = TfPoseEstimator.draw_humans(frame, humans, imgcopy=False)
 	
